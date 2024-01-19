@@ -31,6 +31,12 @@ h1 {
     background-color:#F6B17A;
 }
 
+.responsedisplay {
+    color:white;
+    font-size:50px;
+    text-align:center;
+}
+
 .buttons {
     display:block;
     margin:auto;

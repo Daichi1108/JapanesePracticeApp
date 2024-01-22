@@ -101,6 +101,41 @@ h1 {
 }
 
 
+.score {
+    color:white;
+    text-align:center;
+    font-family:monospace;
+    display:grid;
+    grid-auto-flow: column;
+    height:1rem;
+    font-weight: bold;
+}
+
+.correct {
+    color:#0dd30d;
+    font-size:40px;
+    height:1rem;
+}
+
+.incorrect {
+    color:#fd2b2b;
+    font-size:40px;
+    height:1rem;
+}
+
+.correctcount {
+    color:#0dd30d;
+    font-size:100px;
+    height:1rem;
+}
+
+.incorrectcount {
+    color:#fd2b2b;
+    font-size:100px;
+    height:1rem;
+}
+
+
 .buttons{
     margin-top:80px;
     display:grid;

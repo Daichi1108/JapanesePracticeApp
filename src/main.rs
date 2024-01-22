@@ -4,6 +4,7 @@ use rand::Rng;
 use std::collections::HashMap;
 
 // wouldn't it be easier to just have a big match{} statement? idk do whatever
+// idk im not smart i dont really think
 fn init_kana_map() -> HashMap<&'static str, &'static str> {
     let mut map = HashMap::new();
 
@@ -220,6 +221,7 @@ fn main() {
 }
 
 // daichi this is a sin
+// shhhhhhhhhhhhh just hide it and forget its there
 fn getword(types:[bool; 10]) -> String {
 
     let hiragana_normal: Vec<&str> = vec![
@@ -359,7 +361,9 @@ struct RootComponent {//things
     input:String,
     kana:String,
     response:Responses,
-    types:[bool; 10]
+    types:[bool; 10],
+    correctcount:u32,
+    incorrectcount:u32
 }
 
 impl Component for RootComponent {
@@ -370,7 +374,9 @@ impl Component for RootComponent {
             input:String::new(),
             types:[true,false,false,false,false,false,false,false,false,false],
             kana:getword([true,false,false,false,false,false,false,false,false,false]),
-            response:Responses::None
+            response:Responses::None,
+            correctcount:0,
+            incorrectcount:0
         }
     }
     fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {//get message
@@ -383,9 +389,11 @@ impl Component for RootComponent {
                 let kana_map = init_kana_map();
                 if kana_map.get(self.kana.as_str()).unwrap().to_string() == self.input.to_lowercase() {
                     self.response = Responses::Correct;
+                    self.correctcount += 1;
                 }
                 else {
                     self.response = Responses::Wrong(format!("{} = {}",self.kana,kana_map.get(self.kana.as_str()).unwrap_or(&"").to_string()));
+                    self.incorrectcount += 1;
                 }
                 self.input = String::new();
                 self.kana = getword(self.types);
@@ -424,6 +432,16 @@ impl Component for RootComponent {
                     value = {self.input.clone()}/>
                     // i just thought this looked nicer you can get rid of this if you want
                     <button onclick={link.callback(|_| Msg::Guess)}>{"↵"}</button>  
+                </div>
+                <div class = "score">
+                    <div>
+                        <p class = "correct">{"Correct"}</p>
+                        <p class = "correctcount">{self.correctcount.clone()}</p>
+                    </div>
+                    <div>
+                        <p class = "incorrect">{"Incorrect"}</p>
+                        <p class = "incorrectcount">{self.incorrectcount.clone()}</p>
+                    </div>
                 </div>
                 <div class = "buttons">
                     {self.types.iter().enumerate().map(|(i,t)| {

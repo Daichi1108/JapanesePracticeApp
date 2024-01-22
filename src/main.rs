@@ -3,6 +3,7 @@ use web_sys::HtmlInputElement;
 use rand::Rng;
 use std::collections::HashMap;
 
+// wouldn't it be easier to just have a big match{} statement? idk do whatever
 fn init_kana_map() -> HashMap<&'static str, &'static str> {
     let mut map = HashMap::new();
 
@@ -218,6 +219,7 @@ fn main() {
     yew::start_app::<RootComponent>();
 }
 
+// daichi this is a sin
 fn getword(types:[bool; 10]) -> String {
 
     let hiragana_normal: Vec<&str> = vec![
@@ -319,30 +321,44 @@ fn getword(types:[bool; 10]) -> String {
 
     let mut rng = rand::thread_rng();
     let randomnum = rng.gen_range(0..kanalist.len());
-    return kanalist[randomnum].to_string();
+    kanalist[randomnum].to_string()
 
 }
 
+fn get_type_name(id: usize) -> String{
+    match id{
+        0 => "Hiragana",
+        1 => "Dakuon",
+        2 => "Combo",
+        3 => "Small",
+        4 => "Long",
+        5 => "Katakana",
+        6 => "Dakuon",
+        7 => "Combo",
+        8 => "Small",
+        9 => "Long",
+        _ => "Error"
+    }.to_string()
+}
+
+// this sin is so bad that i had to fix it
 enum Msg {//send msg
     Input(String),
     Guess,
-    Toggle0,
-    Toggle1,
-    Toggle2,
-    Toggle3,
-    Toggle4,
-    Toggle5,
-    Toggle6,
-    Toggle7,
-    Toggle8,
-    Toggle9,
+    Toggle(usize),
+    None
+}
+
+enum Responses{
+    Correct,
+    Wrong(String),
     None
 }
 
 struct RootComponent {//things
     input:String,
     kana:String,
-    response:String,
+    response:Responses,
     types:[bool; 10]
 }
 
@@ -354,7 +370,7 @@ impl Component for RootComponent {
             input:String::new(),
             types:[true,false,false,false,false,false,false,false,false,false],
             kana:getword([true,false,false,false,false,false,false,false,false,false]),
-            response:String::new()
+            response:Responses::None
         }
     }
     fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {//get message
@@ -365,54 +381,18 @@ impl Component for RootComponent {
             }
             Msg::Guess => {
                 let kana_map = init_kana_map();
-                if kana_map.get(self.kana.as_str()).unwrap().to_string() == self.input {
-                    self.response = "YAY".to_string();
+                if kana_map.get(self.kana.as_str()).unwrap().to_string() == self.input.to_lowercase() {
+                    self.response = Responses::Correct;
                 }
                 else {
-                    self.response = "U SUCK".to_string();
+                    self.response = Responses::Wrong(format!("{} = {}",self.kana,kana_map.get(self.kana.as_str()).unwrap_or(&"").to_string()));
                 }
                 self.input = String::new();
                 self.kana = getword(self.types);
                 true
             }
-            Msg::Toggle0 => {
-                self.types[0] = !self.types[0];
-                true
-            }
-            Msg::Toggle1 => {
-                self.types[1] = !self.types[1];
-                true
-            }
-            Msg::Toggle2 => {
-                self.types[2] = !self.types[2];
-                true
-            }
-            Msg::Toggle3 => {
-                self.types[3] = !self.types[3];
-                true
-            }
-            Msg::Toggle4 => {
-                self.types[4] = !self.types[4];
-                true
-            }
-            Msg::Toggle5 => {
-                self.types[5] = !self.types[5];
-                true
-            }
-            Msg::Toggle6 => {
-                self.types[6] = !self.types[6];
-                true
-            }
-            Msg::Toggle7 => {
-                self.types[7] = !self.types[7];
-                true
-            }
-            Msg::Toggle8 => {
-                self.types[8] = !self.types[8];
-                true
-            }
-            Msg::Toggle9 => {
-                self.types[9] = !self.types[9];
+            Msg::Toggle(i) => {
+                self.types[i] = !self.types[i];
                 true
             }
             Msg::None => {
@@ -425,27 +405,32 @@ impl Component for RootComponent {
         html! {
             <div>
                 <h1>{"Kana Practice App"}</h1>
-                <div class = "kanadisplay">{self.kana.clone()}</div>
-                <input class = "input" type = "text"
-                oninput = {link.callback(|event: InputEvent| {let input: HtmlInputElement = event.target_unchecked_into(); Msg::Input(input.value())})}
-                onkeypress={link.callback(|key:KeyboardEvent| {if key.char_code()==13 {Msg::Guess} else{Msg::None}})}
-                value = {self.input.clone()}/>
-                <div class = "responsedisplay">{self.response.clone()}</div>
+                <div class = "kanadisplay">
+                    <h1>{self.kana.clone()}</h1>
+                </div>
+                <div class="response-field">
+                    {
+                        match &self.response{
+                            Responses::Correct => html!{<div class="correct">{"yay"}</div>},
+                            Responses::Wrong(message) => html!{<div class="wrong">{message}</div>},
+                            Responses::None => html!{}
+                        }
+                    }
+                </div>
+                <div class="input-fields">
+                    <input type = "text"
+                    oninput = {link.callback(|event: InputEvent| {let input: HtmlInputElement = event.target_unchecked_into(); Msg::Input(input.value())})}
+                    onkeypress={link.callback(|key:KeyboardEvent| {if key.char_code()==13 {Msg::Guess} else{Msg::None}})}
+                    value = {self.input.clone()}/>
+                    // i just thought this looked nicer you can get rid of this if you want
+                    <button onclick={link.callback(|_| Msg::Guess)}>{"↵"}</button>  
+                </div>
                 <div class = "buttons">
-                    <div>
-                        <button class = {self.types[0].to_string()} onclick = {link.callback(|_|Msg::Toggle0)}>{"Hiragana"}</button>
-                        <button class = {self.types[1].to_string()} onclick = {link.callback(|_|Msg::Toggle1)}>{"Dakuon"}</button>
-                        <button class = {self.types[2].to_string()} onclick = {link.callback(|_|Msg::Toggle2)}>{"Combo"}</button>
-                        <button class = {self.types[3].to_string()} onclick = {link.callback(|_|Msg::Toggle3)}>{"Small"}</button>
-                        <button class = {self.types[4].to_string()} onclick = {link.callback(|_|Msg::Toggle4)}>{"Long"}</button>
-                    </div>
-                    <div>
-                        <button class = {self.types[5].to_string()} onclick = {link.callback(|_|Msg::Toggle5)}>{"Katakana"}</button>
-                        <button class = {self.types[6].to_string()} onclick = {link.callback(|_|Msg::Toggle6)}>{"Dakuon"}</button>
-                        <button class = {self.types[7].to_string()} onclick = {link.callback(|_|Msg::Toggle7)}>{"Combo"}</button>
-                        <button class = {self.types[8].to_string()} onclick = {link.callback(|_|Msg::Toggle8)}>{"Small"}</button>
-                        <button class = {self.types[9].to_string()} onclick = {link.callback(|_|Msg::Toggle9)}>{"Long"}</button>
-                    </div>
+                    {self.types.iter().enumerate().map(|(i,t)| {
+                        // ok i'll admit this is messy, the 'title=' part is unnecessary but whatever idc it adds a label when you hover
+                        // also a "toggle" input type does exist btw
+                        html!{<button class = {t.to_string()} onclick = {link.callback(move |_| Msg::Toggle(i.clone()))} title={format!("{} {}",if i<5 {"Hiragana"} else {"Katakana"}, get_type_name(i.clone()))}>{get_type_name(i.clone())}</button>}
+                    }).collect::<Html>()}
                 </div>
             </div>
         }

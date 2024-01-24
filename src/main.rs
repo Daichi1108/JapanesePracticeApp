@@ -443,6 +443,14 @@ impl Component for RootComponent {
                         <p class = "incorrectcount">{self.incorrectcount.clone()}</p>
                     </div>
                 </div>
+                <div class = "mobile-score">
+                    <div class="correct">
+                        {format!("✔ {}",&self.correctcount)}
+                    </div>
+                    <div class="incorrect">
+                        {format!("✖ {}",&self.incorrectcount)}
+                    </div>
+                </div>
                 <div class = "buttons">
                     {self.types.iter().enumerate().map(|(i,t)| {
                         // ok i'll admit this is messy, the 'title=' part is unnecessary but whatever idc it adds a label when you hover

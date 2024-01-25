@@ -1,3 +1,9 @@
+:root{
+    --accent1: #424769;
+    --unselected-color: #525880;
+    --selected-color: #F6B17A;
+}
+
 body {
     background-color:#161824;
 }
@@ -61,7 +67,7 @@ h1 {
 
 .input-fields input{
     vertical-align: top;
-    background-color:#424769;
+    background-color:var(--accent1);
     width:79%;
     height:80px;
     border-radius:20px;
@@ -74,7 +80,7 @@ h1 {
 }
 
 .input-fields input:focus {
-    background-color:#424769;
+    background-color:var(--accent1);
     outline:3px solid #7a81b6;
     border-radius: 15px;
 }
@@ -85,7 +91,7 @@ h1 {
     height:80px;
     margin-left:2%;
     color:white;
-    background-color: #424769;
+    background-color: var(--accent1);
     font-size:3em;
     font-family: monospace;
     border-radius:20px;
@@ -99,7 +105,6 @@ h1 {
 .input-fields button:active{
     background-color:#7a81b6;
 }
-
 
 .score {
     color:white;
@@ -134,10 +139,42 @@ h1 {
     font-size:100px;
     height:1rem;
 }
+.mobile-score{
+    visibility: hidden;
+    display: none;
+}
+
+/* this css gets applied if width <1400px (mobile devices) */
+/* as a side note, you should note that css is compiled top-down, so lower things (greater line number) takes priority */
+/* this is why this code gets prioritized over the .mobile-score stuff just above */
+@media screen and (max-width: 1400px){
+    .score {
+        visibility: hidden;
+        display: none;
+    }
+    .mobile-score{
+        visibility: visible;
+        display: block;
+        position: absolute;
+        top: 120px;
+        left:-1px;
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+        background-color: var(--accent1);
+        padding:4px;
+        width:fit-content;
+        height:fit-content;
+    }
+    .mobile-score .correct,.incorrect{
+        font-size:2em;
+        height:fit-content;
+        font-family: monospace;
+    }
+}
 
 
 .buttons{
-    margin-top:80px;
+    margin-top:40px;
     display:grid;
     width:80%;
     max-width: 500px;
@@ -170,9 +207,9 @@ h1 {
 
 
 .false {
-    background-color:#2D3250;
+    background-color:var(--unselected-color);
 }
 
 .true {
-    background-color:#F6B17A;
+    background-color:var(--selected-color);
 }

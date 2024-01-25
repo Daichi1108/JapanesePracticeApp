@@ -1,0 +1,215 @@
+:root{
+    --accent1: #424769;
+    --unselected-color: #525880;
+    --selected-color: #F6B17A;
+}
+
+body {
+    background-color:#161824;
+}
+
+h1 {
+    color:white;
+    font-family:monospace;
+    text-align:center;
+}
+
+.kanadisplay {
+    height:160px;
+}
+.kanadisplay h1{
+    margin:0px;
+    font-size:1em;
+    color:white;
+    font-size:9em;
+    text-align:center;
+}
+
+.response-field{
+    height:50px;
+    width:80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2px;
+    padding:10px;
+    align-content: center;
+}
+.response-field div{
+    width:200px;
+    height:60%;
+    text-align: center;
+    font-family: monospace;
+    font-size:1.5em;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 8px;
+}
+.response-field .correct{
+    background-color: #327a2c;
+    outline: 3px solid #0dd30d;
+    color: #d3ffd3;
+    
+}
+.response-field .wrong{
+    background-color: #7a2c2c;
+    outline: 3px solid #fd2b2b;
+    color:#ffdfdf;
+}
+
+.input-fields{
+    width: 90%;
+    max-width:600px;
+    margin-left:auto;
+    margin-right:auto;
+    margin-bottom:10px;
+    height:fit-content;
+}
+
+.input-fields input{
+    vertical-align: top;
+    background-color:var(--accent1);
+    width:79%;
+    height:80px;
+    border-radius:20px;
+    text-align: center;
+    color:white;
+    font-family:monospace;
+    font-size:4em;
+    border:0px;
+    outline: 0px;
+}
+
+.input-fields input:focus {
+    background-color:var(--accent1);
+    outline:3px solid #7a81b6;
+    border-radius: 15px;
+}
+
+.input-fields button{
+    vertical-align: top;
+    width:16%;
+    height:80px;
+    margin-left:2%;
+    color:white;
+    background-color: var(--accent1);
+    font-size:3em;
+    font-family: monospace;
+    border-radius:20px;
+    border: 0px;
+}
+.input-fields button:hover {
+    background-color:#525880;
+    border-radius: 15px;
+}
+
+.input-fields button:active{
+    background-color:#7a81b6;
+}
+
+.score {
+    color:white;
+    text-align:center;
+    font-family:monospace;
+    display:grid;
+    grid-auto-flow: column;
+    height:1rem;
+    font-weight: bold;
+}
+
+.correct {
+    color:#0dd30d;
+    font-size:40px;
+    height:1rem;
+}
+
+.incorrect {
+    color:#fd2b2b;
+    font-size:40px;
+    height:1rem;
+}
+
+.correctcount {
+    color:#0dd30d;
+    font-size:100px;
+    height:1rem;
+}
+
+.incorrectcount {
+    color:#fd2b2b;
+    font-size:100px;
+    height:1rem;
+}
+.mobile-score{
+    visibility: hidden;
+    display: none;
+}
+
+/* this css gets applied if width <1400px (mobile devices) */
+/* as a side note, you should note that css is compiled top-down, so lower things (greater line number) takes priority */
+/* this is why this code gets prioritized over the .mobile-score stuff just above */
+@media screen and (max-width: 1400px){
+    .score {
+        visibility: hidden;
+        display: none;
+    }
+    .mobile-score{
+        visibility: visible;
+        display: block;
+        position: absolute;
+        top: 120px;
+        left:-1px;
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+        background-color: var(--accent1);
+        padding:4px;
+        width:fit-content;
+        height:fit-content;
+    }
+    .mobile-score .correct,.incorrect{
+        font-size:2em;
+        height:fit-content;
+        font-family: monospace;
+    }
+}
+
+
+.buttons{
+    margin-top:40px;
+    display:grid;
+    width:80%;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    grid-template-rows:1fr 1fr 1fr 1fr 1fr;
+    gap:4px;
+    grid-auto-flow: column;
+}
+
+.buttons button{
+    width:90%;
+    margin:auto;
+    height:50px;
+    border-radius: 10px;
+    border:none;
+    outline:none;
+    color:white;
+    font-family: monospace;
+    font-size:2em;
+}
+.buttons button:hover.false{
+    background-color:#525880;
+    border-radius: 6px;
+}
+.buttons button:hover.true{
+    background-color:#ffca9e;
+    border-radius: 6px;
+}
+
+
+.false {
+    background-color:var(--unselected-color);
+}
+
+.true {
+    background-color:var(--selected-color);
+}
